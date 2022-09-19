@@ -107,6 +107,7 @@ public class BoardManager : MonoBehaviour
 
     public void SetupScene(int level)
     {
+        /*
         BoardSetup();
         InitialiseList();
         LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);
@@ -114,6 +115,70 @@ public class BoardManager : MonoBehaviour
         int enemyCount = (int)Mathf.Log(level, 2f);
         enemyCount += 5;
         LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);
-        Instantiate(exit, new Vector3(columns - 1, rows - 1, 0f), Quaternion.identity);
+        Instantiate(exit, new Vector3(columns - 1, rows - 1, 0f), Quaternion.identity); */
+
+
+        TextAsset levelAsset;
+
+        switch(level) {
+            case 2:
+                levelAsset = Resources.Load("day2.txt") as TextAsset;
+                
+                break;
+            case 3:
+                levelAsset = Resources.Load("day3.txt") as TextAsset;
+                
+                break;
+            default:
+                levelAsset = Resources.Load("day1.txt") as TextAsset;
+                break;
+        }
+
+        string[] lines = levelAsset.text.Split('\n');
+
+        for (int i = 0; i < 8; i++)
+        {
+            for(int j = 0; j < 8; j++)
+            {
+                GameObject floorChoice = floorTiles[Random.Range(0, floorTiles.Length)];
+                Instantiate(floorChoice, new Vector3(j, i, 0f), Quaternion.identity);
+            }
+        }
+
+        for (int i = 0; i < lines.Length; i++)
+        {
+            if (i < lines.Length / 2) {
+                string temp = lines[i];
+                lines[i] = lines[lines.Length - i - 1];
+                lines[lines.Length - i - 1] = temp;
+            }
+            
+            for (int j = 0; j < lines[i].Length; j++)
+            {
+                if (lines[i][j] == 'x')
+                {
+                    // Wall
+                    GameObject wallChoice = outerWallTiles[Random.Range(0, outerWallTiles.Length)];
+                    Instantiate(wallChoice, new Vector3(j - 1, i - 1, 0f), Quaternion.identity);
+                }
+                else if (lines[i][j] == 'F')
+                {
+                    // Food
+                    GameObject foodChoice = foodTiles[Random.Range(0, foodTiles.Length)];
+                    Instantiate(foodChoice, new Vector3(j - 1, i - 1, 0f), Quaternion.identity);
+                }
+                else if (lines[i][j] == 'E')
+                {
+                    // Enemy
+                    GameObject enemyChoice = enemyTiles[Random.Range(0, enemyTiles.Length)];
+                    Instantiate(enemyChoice, new Vector3(j - 1, i - 1, 0f), Quaternion.identity);
+                }
+                else if (lines[i][j] == 'T')
+                {
+                    // Exit                    
+                    Instantiate(exit, new Vector3(j - 1, i - 1, 0f), Quaternion.identity);
+                }
+            }
+        }
     }
 }

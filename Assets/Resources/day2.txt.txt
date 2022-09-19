@@ -1,0 +1,10 @@
+xxxxxxxxxx
+xF       T
+x   E    x
+x        x
+x     F  x
+x E      x
+x        x
+x        x
+x    E F x
+xxxxxxxxxx

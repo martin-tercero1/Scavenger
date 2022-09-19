@@ -72,6 +72,8 @@ public class GameManager : MonoBehaviour
     //Initializes the game for each level.
     void InitGame()
     {
+
+
         //While doingSetup is true the player can't move, prevent player from moving while title card is up.
         doingSetup = true;
 
@@ -86,6 +88,12 @@ public class GameManager : MonoBehaviour
 
         //Set levelImage to active blocking player's view of the game board during setup.
         levelImage.SetActive(true);
+
+        if (level == 4)
+        {
+            GameOver();
+            return;
+        }
 
         //Call the HideLevelImage function with a delay in seconds of levelStartDelay.
         Invoke("HideLevelImage", levelStartDelay);
@@ -133,14 +141,31 @@ public class GameManager : MonoBehaviour
     //GameOver is called when the player reaches 0 food points
     public void GameOver()
     {
-        //Set levelText to display number of levels passed and game over message
-        levelText.text = "After " + level + " days, you starved.";
 
-        //Enable black background image gameObject.
-        levelImage.SetActive(true);
+        if (level == 4)
+        {
+            print("Gameover was called");
+            //Set levelText to display number of levels passed and game over message
+            levelText.text = "Congrats, you won";
 
-        //Disable this GameManager.
-        enabled = false;
+            //Enable black background image gameObject.
+            levelImage.SetActive(true);
+
+            //Disable this GameManager.
+            enabled = false;
+            
+            SoundManager.instance.musicSource.Stop();
+        } else
+        {
+            //Set levelText to display number of levels passed and game over message
+            levelText.text = "After " + level + " days, you starved.";
+
+            //Enable black background image gameObject.
+            levelImage.SetActive(true);
+
+            //Disable this GameManager.
+            enabled = false;
+        }
     }
 
     //Coroutine to move enemies in sequence.
